@@ -1,6 +1,6 @@
 # Differences between `withLatestFrom`,`combineLatest` and `combineLatestWith`
 
-There are subtle differences in behaviour of these RxJs operators, this app explore this.
+There are subtle differences in behaviour of these RxJs operators, this app explores this.
 
 ## How to use this
 
@@ -31,7 +31,8 @@ userData$.pipe(
 - It will not execute the next callback
 - This because while the albumData$ observable is delayed and the 'Next' notification is only emitted after after the emission of the Complete notification
    
-   ![Scenario 1 image](scenario1.png)
+   <img src="scenario1.png" width="500" alt="Scenario 1 image">
+
 ## Scenario 2
 
 ```
@@ -46,8 +47,7 @@ combineLatest([userData$, albumData$]).subscribe({
 - The combineLatests stream will run the complete callback when **both** streams complete
 - If you remove one of the `observer.complete()` calls in the observable definition, you will notice that the complete callback never runs
 
-
-![Scenario 2 image](scenario2.png)
+<img src="scenario2.png" width="500" alt="Scenario 2 image">
 
 ## Scenario 3
 
@@ -63,7 +63,7 @@ userData$.pipe(combineLatestWith(albumData$)).subscribe({
 - The combineLatests stream will run the complete callback when **both** streams complete
 - If you remove one of the `observer.complete()` calls in the observable definition, you will notice that the complete callback never runs
 
-![Scenario 3](scenario3.png)
+<img src="scenario3.png" width="500" alt="Scenario 3 image">
 
 ## Why make a vanilla TS app for this?
 
