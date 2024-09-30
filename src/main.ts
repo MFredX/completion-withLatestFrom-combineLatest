@@ -4,9 +4,8 @@ import {
   delay,
   Observable,
   withLatestFrom,
+  tap
 } from 'rxjs';
-
-/* Does combineLatest execute an observable that implements an API call? */
 
 interface User {
   id: number;
@@ -22,7 +21,14 @@ const userData$: Observable<User[]> = new Observable<User[]>((observer) => {
       observer.complete();
     })
     .catch((err) => observer.error(err));
-});
+}).pipe((
+  tap({
+      next: (data) => console.log('User Data',data),
+      error: (err) => console.error('User error',err),
+      complete: () => console.log('User Data Completed')
+    })
+  )
+);
 
 interface Album {
   id: number;
@@ -39,9 +45,15 @@ const albumData$: Observable<Album[]> = new Observable<Album[]>((observer) => {
     })
     .catch((err) => observer.error(err));
 }).pipe(
+  tap({
+    next: (data) => console.log('Album data',data),
+    error: (err) => console.error('Album error',err),
+    complete: () => console.log('Album data Completed')
+  }),
   delay(2000)
 );
 
+/* SCENARIO 1 */
 /* -------------------------------------------------------------------------- */
 /* 
 This subscription will only execute the complete callback
@@ -53,28 +65,30 @@ after after the Complete notification
 // userData$.pipe(
 //   withLatestFrom(albumData$),
 // ).subscribe({
-//   next: (data) => console.log('results',data),
+//   next: (data) => console.log('Scenario 1 Next',data),
 //   error: (err) => console.error(err),
-//   complete: () => console.log('Completed'),
+//   complete: () => console.log('Scenario 1 Completed'),
 // });
 
+/* SCENARIO 2 */
 /* -------------------------------------------------------------------------- */
 /* Both next notification and complete notification received by the subscription */
 
 // combineLatest([userData$, albumData$]).subscribe({
-//   next: (data) => console.log('results',data),
+//   next: (data) => console.log('Scenario 2 Next',data),
 //   error: (err) => console.error(err),
-//   complete: () => console.log('Completed'),
+//   complete: () => console.log('Scenario 2 Completed'),
 // });
 
+/* SCENARIO 3 */
 /* -------------------------------------------------------------------------- */
 /* Both next notification and complete notification received by the subscription */
 
 userData$.pipe(combineLatestWith(albumData$)).subscribe({
-  next: (data) => console.log('results combineLatestWith',data),
+  next: (data) => console.log('Scenario 3 Next',data),
   error: (err) => console.error(err),
-  complete: () => console.log('Completed'),
+  complete: () => console.log('Scenario 3 Completed'),
 });
 
 
-// How would this work with merge map
+// Thought: How would this work with merge map?
