@@ -31,6 +31,7 @@ userData$.pipe(
 - It will not execute the next callback
 - This because while the albumData$ observable is delayed and the 'Next' notification is only emitted after after the emission of the Complete notification
    
+   ![Scenario 1 image](scenario1.png)
 ## Scenario 2
 
 ```
@@ -46,6 +47,8 @@ combineLatest([userData$, albumData$]).subscribe({
 - If you remove one of the `observer.complete()` calls in the observable definition, you will notice that the complete callback never runs
 
 
+![Scenario 2 image](scenario2.png)
+
 ## Scenario 3
 
 ```
@@ -60,8 +63,9 @@ userData$.pipe(combineLatestWith(albumData$)).subscribe({
 - The combineLatests stream will run the complete callback when **both** streams complete
 - If you remove one of the `observer.complete()` calls in the observable definition, you will notice that the complete callback never runs
 
+![Scenario 3](scenario3.png)
+
 ## Why make a vanilla TS app for this?
 
 A local app test app provides the opportunity to utilise browser developer tools to explore these subtleties of these operators.
 
-// Todo: Add marble diagrams
